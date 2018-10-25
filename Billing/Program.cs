@@ -10,6 +10,9 @@ namespace Billing
 {
     class Program
     {
+        private const string AzureServiceBusConnectionString =
+            "Endpoint=sb://tbd";
+
         static async Task Main()
         {
             Console.Title = "Billing";
@@ -19,7 +22,8 @@ namespace Billing
                 activator.Register(() => new OrderPlacedHandler(activator.Bus));
 
                 var bus = Configure.With(activator)
-                    .Transport(t => t.UseRabbitMq("amqp://localhost", "RetailDemo.Rebus.Billing"))
+                    //.Transport(t => t.UseRabbitMq("amqp://localhost", "RetailDemo.Rebus.Billing"))
+                    .Transport(t => t.UseAzureServiceBus(AzureServiceBusConnectionString, "RetailDemo.Rebus.Billing"))
                     .Routing(r => r.TypeBased().Map<OrderPlaced>("RetailDemo.Rebus.Sales"))
                     .Logging(l => l.ColoredConsole(LogLevel.Info))
                     .Start();

@@ -11,6 +11,9 @@ namespace Shipping
 {
     class Program
     {
+        private const string AzureServiceBusConnectionString =
+            "Endpoint=sb://tbd";
+
         static async Task Main()
         {
             Console.Title = "Shipping";
@@ -21,7 +24,8 @@ namespace Shipping
                 activator.Register(() => new ShippingPolicy(activator.Bus));
                 
                 var bus = Configure.With(activator)
-                    .Transport(t => t.UseRabbitMq("amqp://localhost", "RetailDemo.Rebus.Shipping"))
+                    //.Transport(t => t.UseRabbitMq("amqp://localhost", "RetailDemo.Rebus.Shipping"))
+                    .Transport(t => t.UseAzureServiceBus(AzureServiceBusConnectionString, "RetailDemo.Rebus.Shipping"))
                     .Routing(r =>
                     {
                         r.TypeBased()

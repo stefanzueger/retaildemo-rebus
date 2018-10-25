@@ -11,6 +11,9 @@ namespace ClientUI
 {
     class Program
     {
+        private const string AzureServiceBusConnectionString =
+            "Endpoint=sb://tbd";
+
         static async Task Main()
         {
             Console.Title = "ClientUI";
@@ -18,7 +21,8 @@ namespace ClientUI
             using (var activator = new BuiltinHandlerActivator())
             {
                 var bus = Configure.With(activator)
-                    .Transport(t => t.UseRabbitMqAsOneWayClient("amqp://localhost"))
+                    //.Transport(t => t.UseRabbitMqAsOneWayClient("amqp://localhost"))
+                    .Transport(t => t.UseAzureServiceBusAsOneWayClient(AzureServiceBusConnectionString))
                     .Logging(l => l.ColoredConsole(LogLevel.Info))
                     .Routing(r => r.TypeBased().Map<PlaceOrder>("RetailDemo.Rebus.Sales"))
                     .Start();
