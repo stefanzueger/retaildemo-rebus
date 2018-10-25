@@ -18,7 +18,7 @@ namespace ClientUI
             using (var activator = new BuiltinHandlerActivator())
             {
                 var bus = Configure.With(activator)
-                    .Transport(t => t.UseRabbitMq("amqp://localhost", "RetailDemo.Rebus.ClientUI"))
+                    .Transport(t => t.UseRabbitMqAsOneWayClient("amqp://localhost"))
                     .Logging(l => l.ColoredConsole(LogLevel.Info))
                     .Routing(r => r.TypeBased().Map<PlaceOrder>("RetailDemo.Rebus.Sales"))
                     .Start();
